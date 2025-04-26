@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router-dom';
+
 type Result = {
     id: string;
     name?: string;
@@ -6,10 +8,12 @@ type Result = {
   
   type SearchResultsProps = {
     results: Result[];
-    onSelect: (item: Result) => void;
+    type: 'people' | 'movies';
   };
   
-  export default function SearchResults({ results, onSelect }: SearchResultsProps) {
+  export default function SearchResults({ results, type }: SearchResultsProps) {
+    const navigate = useNavigate();
+
     return (
       <div className="bg-white shadow p-8 w-full">
         <h2 className="text-2xl font-bold text-green mb-6">Results</h2>
@@ -19,7 +23,7 @@ type Result = {
               <li key={item.id} className="flex justify-between items-center py-4 border-b border-gray-100 last:border-0">
                 <span className="text-xl font-medium text-gray-800">{item.name || item.title}</span>
                 <button
-                  onClick={() => onSelect(item)}
+                  onClick={() => navigate(`/${type}/${item.id}`)}
                   className="rounded bg-green-500 text-white font-bold py-3 px-6 hover:bg-green-600 transition-all duration-200 shadow"
                 >
                   SEE DETAILS

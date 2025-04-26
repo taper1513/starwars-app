@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import LayoutContainer from '../layouts/LayoutContainer';
 import SearchForm from '../components/SearchForm';
 import SearchResults from '../components/SearchResults';
 import axios from 'axios';
@@ -24,13 +23,12 @@ export default function HomePage() {
           query: searchParams.query,
         },
       });
-      return response.data.results;
+      return response.data.results ?? [];
     },
     enabled: !!searchParams,
   });
 
   return (
-    <LayoutContainer>
       <div className="flex flex-col lg:flex-row gap-8 justify-center items-start w-full max-w-6xl">
         <div className="w-full lg:flex-[3] lg:place-items-end">
           <SearchForm onSearch={setSearchParams} />
@@ -40,10 +38,9 @@ export default function HomePage() {
           {isLoading ? (
             <div className="text-gray-600 mb-4">Loading...</div>
           ) : (
-            <SearchResults results={data} onSelect={(item) => console.log('Selected:', item)} />
+            <SearchResults results={data} type={searchParams?.type as 'people' | 'movies'} />
           )}
         </div>
       </div>
-    </LayoutContainer>
   );
 }
