@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Services\SwapiService;
+
+class MovieController extends Controller
+{
+    public function __construct(private SwapiService $swapiService)
+    {}
+
+    public function show(string $id)
+    {
+        return response()->json(
+            $this->swapiService->getMovie($id)
+        );
+    }
+} 

@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+  app:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/var/www
+      - vendor_app:/var/www/vendor
+    command: php artisan serve --host=0.0.0.0 --port=8000
+    depends_on:
+      - redis
+    environment:
+      CACHE_DRIVER: redis
+      QUEUE_CONNECTION: redis
+      REDIS_HOST: redis
+
+  queue:
+    build: ./backend
+    volumes:
+      - ./backend:/var/www
+      - vendor_app:/var/www/vendor
+    command: php artisan queue:work
+    depends_on:
+      - redis
+    environment:
+      CACHE_DRIVER: redis
+      QUEUE_CONNECTION: redis
+      REDIS_HOST: redis
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    command: npm run dev
+    depends_on:
+      - app
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+
+volumes:
+  vendor_app:

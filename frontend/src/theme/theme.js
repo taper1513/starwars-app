@@ -1,0 +1,16 @@
+export const theme = {
+  borderRadius: {
+    DEFAULT: '20px',
+  },
+  boxShadow: {
+    DEFAULT: '0 1px 2px 0 rgba(124, 124, 124, 0.75)',
+    input: 'inset 0 1px 3px 0 rgba(124, 124, 124, 0.75)',
+  },
+  colors: {
+    gray: '#ededed',
+    primary: '#383838',
+  },
+  fontFamily: {
+    montserrat: ['Montserrat', 'sans-serif'],
+  }
+}; 
