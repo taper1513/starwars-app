@@ -12,7 +12,7 @@ type Result = {
   export default function SearchResults({ results, onSelect }: SearchResultsProps) {
     return (
       <div className="bg-white shadow p-8 w-full">
-        <h2 className="text-2xl font-bold text-green-600 mb-6">Results</h2>
+        <h2 className="text-2xl font-bold text-green mb-6">Results</h2>
         {results.length > 0 ? (
           <ul className="flex flex-col gap-4">
             {results.map((item) => (

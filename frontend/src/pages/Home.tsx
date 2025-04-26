@@ -31,12 +31,12 @@ export default function HomePage() {
 
   return (
     <LayoutContainer>
-      <div className="flex flex-col lg:flex-row gap-12 justify-center items-start w-full max-w-6xl">
-        <div className="w-full flex-1">
+      <div className="flex flex-col lg:flex-row gap-8 justify-center items-start w-full max-w-6xl">
+        <div className="w-full lg:flex-[3] lg:place-items-end">
           <SearchForm onSearch={setSearchParams} />
         </div>
 
-        <div className="flex-[2] w-full">
+        <div className="flex-[4] w-full">
           {isLoading ? (
             <div className="text-gray-600 mb-4">Loading...</div>
           ) : (

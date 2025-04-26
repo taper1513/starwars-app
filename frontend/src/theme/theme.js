@@ -9,8 +9,13 @@ export const theme = {
   colors: {
     gray: '#ededed',
     primary: '#383838',
+    green: {
+      500: '#0ab463',
+      600: '#0ab463',
+      DEFAULT: '#0ab463',
+    }
   },
   fontFamily: {
-    montserrat: ['Montserrat', 'sans-serif'],
+    sans: ['Montserrat', 'sans-serif'],
   }
 }; 

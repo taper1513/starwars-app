@@ -18,8 +18,8 @@ export default function SearchForm({ onSearch }: Props) {
   const isButtonDisabled = !query.trim();
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-8 p-8 bg-white shadow w-full max-w-md">
-      <span className="mb-5 font-montserrat text-sm font-semibold text-primary">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-2 p-8 bg-white shadow w-full  lg:max-w-[410px]">
+      <span className="font-montserrat text-sm font-semibold text-primary">
         What are you searching for?
       </span>
       <div className="flex gap-8">
@@ -44,7 +44,7 @@ export default function SearchForm({ onSearch }: Props) {
           placeholder="e.g. Chewbacca, Yoda, Boba Fett"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className="shadow-input border-[1px] rounded-md border-gray-200 border-[#c4c4c4] 
+          className="w-[350px] h-[40px] shadow-input border-[1px] rounded-sm border-gray-200 border-[#c4c4c4] 
             px-6 py-3 text-lg focus:outline-none focus:border-[#383838] focus:border-[1px]"
              
         />
