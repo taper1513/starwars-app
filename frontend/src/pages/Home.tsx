@@ -26,6 +26,7 @@ export default function HomePage() {
       return response.data.results ?? [];
     },
     enabled: !!searchParams,
+    staleTime: 1000 * 60 * 5,
   });
 
   return (

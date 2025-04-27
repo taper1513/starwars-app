@@ -28,6 +28,21 @@ services:
       CACHE_DRIVER: redis
       QUEUE_CONNECTION: redis
       REDIS_HOST: redis
+  
+  scheduler:
+    build: ./backend
+    volumes:
+      - ./backend:/var/www
+      - vendor_app:/var/www/vendor
+    command: php artisan schedule:work
+    depends_on:
+      - app
+      - queue
+      - redis
+    environment:
+      CACHE_DRIVER: redis
+      QUEUE_CONNECTION: redis
+      REDIS_HOST: redis
 
   frontend:
     build: ./frontend

@@ -12,9 +12,9 @@ export default function LayoutContainer({ children }: LayoutContainerProps) {
           <span className="font-black">SWStarter</span>
         </h1>
       </div>
-      <div className="flex flex-col items-center gap-12 w-full max-w-7xl mx-auto">
+      <div className="flex flex-col items-center gap-12 w-full sm:p-7 max-w-7xl mx-auto">
         {children}  
       </div>
-    </div>
+    </div>  
   );
 } 

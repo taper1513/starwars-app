@@ -16,4 +16,6 @@ COPY . .
 # Roda o composer install automaticamente
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
+RUN pecl install redis && docker-php-ext-enable redis
+
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]

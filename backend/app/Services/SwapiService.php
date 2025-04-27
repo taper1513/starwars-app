@@ -35,14 +35,14 @@ class SwapiService
 
     public function getPerson(string $id, bool $lightweight = false)
     {
-        $url = self::BASE_URL . "/people/{$id}";
+        $url = self::BASE_URL . "people/{$id}";
 
         return $this->fetchWithCache(
-            "person:{$id}",
+            "person:{$id}" . ($lightweight ? 'lightweight' : 'full'),
             $url,
             [],
             function ($data) use ($lightweight, $id) {
-                if (!$data || empty($data['name'])) {
+                    if (!$data || empty($data['name'])) {
                     Log::warning("Empty or invalid person data for ID {$id}", $data);
                     return ['id' => $id, 'name' => 'Unknown'];
                 }
@@ -69,10 +69,10 @@ class SwapiService
 
     public function getMovie(string $id, bool $lightweight = false)
     {
-        $url = self::BASE_URL . "/films/{$id}";
+        $url = self::BASE_URL . "films/{$id}";
 
         return $this->fetchWithCache(
-            "movie:{$id}",
+            "movie:{$id}" . ($lightweight ? 'lightweight' : 'full'),
             $url,
             [],
             function ($data) use ($lightweight, $id) {

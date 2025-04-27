@@ -7,7 +7,10 @@ export const theme = {
     input: 'inset 0 1px 3px 0 rgba(124, 124, 124, 0.75)',
   },
   colors: {
-    gray: '#ededed',
+    gray: {
+      DEFAULT: '#ededed',
+      300: '#c4c4c4',
+    },
     primary: '#383838',
     green: {
       500: '#0ab463',

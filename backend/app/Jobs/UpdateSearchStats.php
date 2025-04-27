@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -15,6 +16,14 @@ class UpdateSearchStats implements ShouldQueue
 
     public function handle()
     {
+
+        Log::info('Refreshing search stats:', [
+            'query' => $this->query,
+            'type' => $this->type,
+            'execution_time' => $this->executionTime,
+        ]);
+
+
         $searchCounts = Cache::get('search_counts', []);
         $requestTimes = Cache::get('request_times', []);
         $hourCounts = Cache::get('hour_counts', array_fill(0, 24, 0));
