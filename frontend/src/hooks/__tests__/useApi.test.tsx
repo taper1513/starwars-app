@@ -6,7 +6,6 @@ import { useApi } from '../useApi';
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
-
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -24,7 +23,6 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
 describe('useApi', () => {
   afterEach(() => {
     jest.clearAllMocks();
-    // Limpa o cache entre os testes
     queryClient.clear();
   });
 
@@ -43,12 +41,8 @@ describe('useApi', () => {
     
     mockedAxios.get.mockRejectedValueOnce(error);
     jest.spyOn(axios, 'isAxiosError').mockReturnValue(true);
-
     const { result } = renderHook(() => useApi<{ foo: string }>('/test', ['test']), { wrapper });
-
     await waitFor(() => expect(result.current.failureReason?.error).toBeDefined());
-
-
     expect(result.current.failureReason?.error).toBe('Network Error');
   });
 });

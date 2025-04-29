@@ -22,7 +22,7 @@ export default function DetailPage({
   onBack,
 }: DetailPageProps) {
   return (
-    <div className="bg-white shadow p-8 w-[804px] mx-auto mt-10 ">
+    <div className="bg-white shadow p-8 lg:w-[804px] mx-auto mt-10 ">
       <h2 className="text-xl font-bold mb-4">{title}</h2>
       <div className="flex flex-col md:flex-row gap-8">
         <div className="flex-1">
