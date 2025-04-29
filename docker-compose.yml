@@ -21,6 +21,10 @@ services:
     environment:
       CACHE_DRIVER: redis
       CACHE_STORE: redis
+      LOG_CHANNEL: stdout
+      LOG_LEVEL: debug
+      LOG_STACK: stdout
+      APP_DEBUG: true
       QUEUE_CONNECTION: redis
       REDIS_HOST: redis
       L5_SWAGGER_GENERATE_ALWAYS: true
@@ -49,8 +53,13 @@ services:
     environment:
       CACHE_DRIVER: redis
       CACHE_STORE: redis
+      LOG_CHANNEL: stdout
+      LOG_LEVEL: debug
+      LOG_STACK: stdout
+      APP_ENV: local
       QUEUE_CONNECTION: redis
       REDIS_HOST: redis
+      APP_DEBUG: true
   
   scheduler:
     build: 
@@ -68,6 +77,12 @@ services:
       CACHE_STORE: redis
       QUEUE_CONNECTION: redis
       REDIS_HOST: redis
+      LOG_CHANNEL: stdout
+      LOG_LEVEL: debug
+      LOG_STACK: stdout
+      APP_ENV: local
+      APP_DEBUG: true
+    command: cron -f
 
   frontend:
     build: ./frontend
@@ -86,9 +101,10 @@ services:
     volumes:
       - ./backend:/var/www
       - vendor_app:/var/www/vendor
-    command: sh -c "cp .env.example .env && php artisan key:generate && php artisan test"
+    command: sh -c "cp -n .env.example .env.testing && php artisan key:generate --env=testing && php artisan test"
     environment:  
       LOG_LEVEL: error
+      APP_ENV: testing
 
   frontend-tests:
     build:

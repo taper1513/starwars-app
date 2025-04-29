@@ -48,5 +48,11 @@ class UpdateSearchStats implements ShouldQueue
             'avg_response_time' => round($avgTime, 2),
             'busiest_hour' => $busiestHour
         ], now()->addHours(1));
+
+        Log::info('Search stats updated successfully', [
+            'top_searches' => $topSearchesWithPercentage,
+            'avg_response_time' => round($avgTime, 2),
+            'busiest_hour' => $busiestHour
+        ]);
     }
 } 

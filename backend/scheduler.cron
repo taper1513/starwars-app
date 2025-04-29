@@ -1,2 +1,5 @@
+# Run every 5 minutes and ensure proper environment
 * * * * * cd /var/www && /usr/local/bin/php artisan dispatch:update-search-stats >> /var/www/storage/logs/cron.log 2>&1
+
+# An empty line is required at the end of this file for a valid cron file
 

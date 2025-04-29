@@ -26,4 +26,10 @@ class Kernel extends ConsoleKernel
 
         require base_path("routes/console.php");
     }
+
+    protected $commands = [
+        Commands\WarmSwapiCache::class,
+        Commands\RedisTestCommand::class,
+        Commands\DispatchUpdateSearchStats::class,
+    ];
 } 

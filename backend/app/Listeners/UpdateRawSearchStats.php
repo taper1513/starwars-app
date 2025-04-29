@@ -31,20 +31,25 @@ class UpdateRawSearchStats implements ShouldQueue
      */
     public function handle(SearchPerformed $event)
     {
+
+        Log::info('Event triggered! ', [
+            'query' => $event->query,
+            'type' => $event->type,
+            'execution_time' => $event->executionTime,
+        ]);
+
         // Create a unique lock key for this search event
         $lockKey = "search_stats_lock:{$event->query}:{$event->type}:" . floor($event->executionTime * 1000);
         
         // Prevent duplicate processing with a cache lock
         if (!Cache::add($lockKey, true, 60)) {
             Log::info('Skipping duplicate search stats update');
+
+            
             return;
         }
 
-        Log::info('UpdateRawSearchStats listener triggered', [
-            'query' => $event->query,
-            'type' => $event->type,
-            'execution_time' => $event->executionTime,
-        ]);
+        Log::info('Event Not Duplicate');
 
         try {
             // Update search count statistics
