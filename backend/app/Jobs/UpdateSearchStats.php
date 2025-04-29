@@ -24,7 +24,7 @@ class UpdateSearchStats implements ShouldQueue
 
         Log::info('Search counts: ' . json_encode($searchCounts));
         Log::info('Request times: ' . json_encode($requestTimes));
-        Log::info('Hour counts: ' . json_encode($hourCounts));  
+        Log::info('Hour counts: ' . json_encode($hourCounts));      
 
         arsort($searchCounts);
         $total = array_sum($searchCounts);
@@ -36,10 +36,10 @@ class UpdateSearchStats implements ShouldQueue
             ];
         }, $topSearches);
 
-        // Calculate average response time
+        // Calculate average response time from all requests
         $avgTime = count($requestTimes) > 0 ? array_sum($requestTimes) / count($requestTimes) : 0;
 
-        // Find busiest hour
+        // Determine the hour with the highest search activity
         $busiestHour = array_search(max($hourCounts), $hourCounts);
 
         // Store computed stats

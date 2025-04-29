@@ -31,10 +31,10 @@ class UpdateRawSearchStats implements ShouldQueue
      */
     public function handle(SearchPerformed $event)
     {
-        // Generate a unique key for this event
+        // Create a unique lock key for this search event
         $lockKey = "search_stats_lock:{$event->query}:{$event->type}:" . floor($event->executionTime * 1000);
         
-        // Try to acquire a lock to prevent duplicate processing
+        // Prevent duplicate processing with a cache lock
         if (!Cache::add($lockKey, true, 60)) {
             Log::info('Skipping duplicate search stats update');
             return;
@@ -47,17 +47,17 @@ class UpdateRawSearchStats implements ShouldQueue
         ]);
 
         try {
-            // Increment search count for the query
+            // Update search count statistics
             $searchCounts = Cache::get('search_counts', []);
             $searchCounts[$event->query] = ($searchCounts[$event->query] ?? 0) + 1;
             Cache::put('search_counts', $searchCounts);
 
-            // Store request time
+            // Record request execution time
             $requestTimes = Cache::get('request_times', []);
             $requestTimes[] = $event->executionTime;
             Cache::put('request_times', $requestTimes);
 
-            // Increment count for the current hour
+            // Update hourly search statistics
             $hourCounts = Cache::get('hour_counts', array_fill(0, 24, 0));
             $currentHour = now()->hour;
             $hourCounts[$currentHour]++;

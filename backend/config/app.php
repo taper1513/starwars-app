@@ -150,6 +150,11 @@ return [
         App\Providers\AppServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        
+        /*
+         * Package Service Providers...
+         */
+        L5Swagger\L5SwaggerServiceProvider::class,
     ],
 
     'aliases' => [

@@ -1,0 +1,246 @@
+openapi: 3.0.0
+info:
+  title: Star Wars API
+  description: API for searching and retrieving Star Wars characters and movies
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000/api
+    description: Development server
+
+paths:
+  /search:
+    get:
+      summary: Search for people or movies
+      description: Search for characters or movies in the Star Wars universe
+      parameters:
+        - name: type
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [people, movies]
+          description: Type of search
+        - name: query
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 1
+          description: Search term
+      responses:
+        '200':
+          description: Successful search
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Person'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+
+  /people/{id}:
+    get:
+      summary: Get person details
+      description: Get detailed information about a specific character
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the person
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+        '404':
+          description: Person not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /movies/{id}:
+    get:
+      summary: Get movie details
+      description: Get detailed information about a specific movie
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the movie
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movie'
+        '404':
+          description: Movie not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /stats:
+    get:
+      summary: Get search statistics
+      description: Get statistics about search operations
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stats'
+
+components:
+  schemas:
+    Person:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        height:
+          type: string
+        mass:
+          type: string
+        hair_color:
+          type: string
+        skin_color:
+          type: string
+        eye_color:
+          type: string
+        birth_year:
+          type: string
+        gender:
+          type: string
+        homeworld:
+          type: string
+        films:
+          type: array
+          items:
+            type: string
+        species:
+          type: array
+          items:
+            type: string
+        vehicles:
+          type: array
+          items:
+            type: string
+        starships:
+          type: array
+          items:
+            type: string
+        created:
+          type: string
+          format: date-time
+        edited:
+          type: string
+          format: date-time
+        url:
+          type: string
+          format: uri
+
+    Movie:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        episode_id:
+          type: integer
+        opening_crawl:
+          type: string
+        director:
+          type: string
+        producer:
+          type: string
+        release_date:
+          type: string
+          format: date
+        characters:
+          type: array
+          items:
+            type: string
+        planets:
+          type: array
+          items:
+            type: string
+        starships:
+          type: array
+          items:
+            type: string
+        vehicles:
+          type: array
+          items:
+            type: string
+        species:
+          type: array
+          items:
+            type: string
+        created:
+          type: string
+          format: date-time
+        edited:
+          type: string
+          format: date-time
+        url:
+          type: string
+          format: uri
+
+    Stats:
+      type: object
+      properties:
+        top_searches:
+          type: array
+          items:
+            type: object
+            properties:
+              query:
+                type: string
+              count:
+                type: integer
+              percentage:
+                type: number
+                format: float
+        avg_response_time:
+          type: number
+          format: float
+        busiest_hour:
+          type: integer
+          minimum: 0
+          maximum: 23
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+
+    ValidationError:
+      type: object
+      properties:
+        message:
+          type: string
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string 

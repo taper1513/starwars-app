@@ -30,7 +30,7 @@ class WarmSwapiCache extends Command
             if ($movie && $movie['title'] !== 'Unknown') {
                 $this->info("Cached movie {$i}: {$movie['title']}");
             }
-            usleep(100000); // 100ms delay
+            usleep(100000); // Add delay to respect API rate limits
         }
 
         // Then get all people and cache them with full data
@@ -40,7 +40,7 @@ class WarmSwapiCache extends Command
             if ($person && $person['name'] !== 'Unknown') {
                 $this->info("Cached person {$i}: {$person['name']}");
             }
-            usleep(100000); // 100ms delay
+            usleep(100000); // Add delay to respect API rate limits
         }
 
         $this->info('SWAPI cache warming complete!');

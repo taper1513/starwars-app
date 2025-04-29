@@ -8,7 +8,17 @@ services:
     volumes:
       - ./backend:/var/www
       - vendor_app:/var/www/vendor
-    command: php artisan serve --host=0.0.0.0 --port=8000
+      - storage_app:/var/www/storage
+    command: >
+      sh -c "composer install &&
+             composer dump-autoload &&
+             php artisan config:clear &&
+             php artisan cache:clear &&
+             php artisan package:discover &&
+             php artisan storage:link &&
+             php artisan vendor:publish --tag=swagger-l5-swagger &&
+             php artisan l5-swagger:generate &&
+             php artisan serve --host=0.0.0.0 --port=8000"
     depends_on:
       - redis
     environment:
@@ -16,7 +26,11 @@ services:
       CACHE_STORE: redis
       QUEUE_CONNECTION: redis
       REDIS_HOST: redis
-  
+      L5_SWAGGER_GENERATE_ALWAYS: true
+      L5_SWAGGER_CONST_HOST: http://localhost:8000/api
+      L5_SWAGGER_USE_ABSOLUTE_PATH: true
+      L5_FORMAT_TO_USE_FOR_DOCS: json
+
   cachewarmer:
     build: ./backend
     command: php artisan swapi:warm-cache
@@ -70,12 +84,22 @@ services:
     ports:
       - "6379:6379"
 
-  tests:
+  api-tests:
     build: ./backend
     volumes:
       - ./backend:/var/www
       - vendor_app:/var/www/vendor
     command: php artisan test
+    environment:  
+      LOG_LEVEL: error
+
+  frontend-tests:
+    build: ./frontend
+    volumes:
+      - ./frontend:/app
+    working_dir: /app
+    command: npm test
 
 volumes:
   vendor_app:
+  storage_app:
