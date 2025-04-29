@@ -144,7 +144,7 @@ class SwapiService
                             Log::error('Error normalizing film for person', [
                                 'url' => $url,
                                 'error' => $e->getMessage()
-                            ]);
+                            ]); 
                             return null;
                         }
                     })
@@ -249,14 +249,18 @@ class SwapiService
 
             $data = $response->json();
             if (!$data) {
-                throw new SwapiException(
+                Log::error('SWAPI returned invalid JSON', [
+                    'url' => $url,
+                    'params' => $params,
+                    'body' => (string) $response->getBody(),
+                ]);
+                throw new SwapiException( 
                     'Invalid JSON response from SWAPI',
                     [
                         'url' => $url,
                         'params' => $params,
-                        'body' => $response->body()
-                    ],
-                    500
+                        'body' => (string) $response->getBody(),
+                    ]
                 );
             }
 

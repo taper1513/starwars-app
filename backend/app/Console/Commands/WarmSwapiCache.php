@@ -26,9 +26,13 @@ class WarmSwapiCache extends Command
         // First, get all movies and cache them with full data
         $this->info('Fetching and caching all movies...');
         for ($i = 1; $i <= 6; $i++) {
-            $movie = $this->swapiService->getMovie((string)$i, false);
-            if ($movie && $movie['title'] !== 'Unknown') {
-                $this->info("Cached movie {$i}: {$movie['title']}");
+            try {
+                $movie = $this->swapiService->getMovie((string)$i, false);
+                if ($movie && $movie['title'] !== 'Unknown') {
+                    $this->info("Cached movie {$i}: {$movie['title']}");
+                }
+            } catch (\Exception $e) {
+                Log::error("Cachewarmer: Failed to warm cache for movie ID $i - {$e->getMessage()}");
             }
             usleep(100000); // Add delay to respect API rate limits
         }
@@ -36,9 +40,13 @@ class WarmSwapiCache extends Command
         // Then get all people and cache them with full data
         $this->info('Fetching and caching all people...');
         for ($i = 1; $i <= 83; $i++) {
-            $person = $this->swapiService->getPerson((string)$i, false);
-            if ($person && $person['name'] !== 'Unknown') {
-                $this->info("Cached person {$i}: {$person['name']}");
+            try {
+                $person = $this->swapiService->getPerson((string)$i, false);
+                if ($person && $person['name'] !== 'Unknown') {
+                    $this->info("Cached person {$i}: {$person['name']}");
+                }
+            } catch (\Exception $e) {
+                Log::error("Cachewarmer: Failed to warm cache for person ID $i - {$e->getMessage()}");
             }
             usleep(100000); // Add delay to respect API rate limits
         }

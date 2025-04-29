@@ -10,8 +10,7 @@ services:
       - vendor_app:/var/www/vendor
       - storage_app:/var/www/storage
     command: >
-      sh -c "composer install &&
-             composer dump-autoload &&
+      sh -c "composer dump-autoload &&
              php artisan config:clear &&
              php artisan cache:clear &&
              php artisan package:discover &&
