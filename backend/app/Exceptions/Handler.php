@@ -3,7 +3,8 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -19,6 +20,8 @@ class Handler extends ExceptionHandler
         'password_confirmation',
     ];
 
+    protected $dontReport = [];
+
     /**
      * Register the exception handling callbacks for the application.
      */
@@ -28,24 +31,32 @@ class Handler extends ExceptionHandler
             //
         });
 
-        // Override the default response rendering
-        $this->renderable(function (Throwable $e) {
-            $status = method_exists($e, 'getStatusCode') ? $e->getStatusCode() : 500;
-            
-            $response = [
+        $this->renderable(function (SwapiException $e, Request $request) {
+            $status = $e->getCode() ?: 500;
+            return response()->json([
+                'error' => 'SWAPI Error',
                 'message' => $e->getMessage(),
-                'status' => $status
-            ];
+                'context' => $e->getContext(),
+            ], $status);
+        });
 
-            if (config('app.debug')) {
-                $response['debug'] = [
-                    'file' => $e->getFile(),
-                    'line' => $e->getLine(),
-                    'trace' => $e->getTrace()
-                ];
+        $this->renderable(function (ValidationException $e, Request $request) {
+            return response()->json([
+                'error' => 'Validation Error',
+                'message' => 'The given data was invalid.',
+                'errors' => $e->errors(),
+            ], 422);
+        });
+
+        $this->renderable(function (Throwable $e, Request $request) {
+            if ($request->is('api/*') || $request->wantsJson()) {
+                $status = method_exists($e, 'getStatusCode') ? $e->getStatusCode() : 500;
+                
+                return response()->json([
+                    'error' => class_basename($e),
+                    'message' => $e->getMessage(),
+                ], $status);
             }
-
-            return new JsonResponse($response, $status);
         });
     }
 } 

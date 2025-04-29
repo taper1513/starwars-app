@@ -16,19 +16,16 @@ class UpdateSearchStats implements ShouldQueue
 
     public function handle()
     {
-
-        Log::info('Refreshing search stats:', [
-            'query' => $this->query,
-            'type' => $this->type,
-            'execution_time' => $this->executionTime,
-        ]);
-
+        Log::info('Refreshing search stats job started.');
 
         $searchCounts = Cache::get('search_counts', []);
         $requestTimes = Cache::get('request_times', []);
         $hourCounts = Cache::get('hour_counts', array_fill(0, 24, 0));
 
-        // Calculate top searches
+        Log::info('Search counts: ' . json_encode($searchCounts));
+        Log::info('Request times: ' . json_encode($requestTimes));
+        Log::info('Hour counts: ' . json_encode($hourCounts));  
+
         arsort($searchCounts);
         $total = array_sum($searchCounts);
         $topSearches = array_slice($searchCounts, 0, 5, true);

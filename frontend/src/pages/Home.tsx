@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import SearchForm from '../components/SearchForm';
 import SearchResults from '../components/SearchResults';
 import axios from 'axios';
+import { ApiError } from '../hooks/useApi';
 
 type Result = {
   id: string;
@@ -13,7 +14,7 @@ type Result = {
 export default function HomePage() {
   const [searchParams, setSearchParams] = useState<{ query: string; type: string } | null>(null);
 
-  const { data = [], isLoading } = useQuery({
+  const { data = [], isLoading, error } = useQuery<Result[], ApiError>({
     queryKey: ['search', searchParams],
     queryFn: async () => {
       if (!searchParams) return [];
@@ -30,18 +31,19 @@ export default function HomePage() {
   });
 
   return (
-      <div className="flex flex-col lg:flex-row gap-8 justify-center items-start w-full max-w-6xl">
-        <div className="w-full lg:flex-[3] lg:place-items-end">
-          <SearchForm onSearch={setSearchParams} />
-        </div>
-
-        <div className="flex-[4] w-full">
-          {isLoading ? (
-            <div className="text-gray-600 mb-4">Loading...</div>
-          ) : (
-            <SearchResults results={data} type={searchParams?.type as 'people' | 'movies'} />
-          )}
-        </div>
+    <div className="flex flex-col lg:flex-row gap-8 justify-center items-start w-full max-w-6xl">
+      <div className="w-full lg:flex-[3] lg:place-items-end">
+        <SearchForm onSearch={setSearchParams} />
       </div>
+
+      <div className="flex-[4] w-full">
+        <SearchResults 
+          results={data} 
+          type={searchParams?.type as 'people' | 'movies'} 
+          isLoading={isLoading}
+          error={error || undefined}
+        />
+      </div>
+    </div>
   );
 }

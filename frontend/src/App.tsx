@@ -3,18 +3,21 @@ import HomePage from './pages/Home';
 import MovieDetailsPage from './pages/MovieDetailsPage';
 import PersonDetailsPage from './pages/PersonDetailsPage';
 import LayoutContainer from './layouts/LayoutContainer';
+import ErrorBoundary from './components/ErrorBoundary';
 
 function App() {
   return (
-    <BrowserRouter>
-      <LayoutContainer>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/movies/:id" element={<MovieDetailsPage />} />
-          <Route path="/people/:id" element={<PersonDetailsPage />} />
-        </Routes>
-      </LayoutContainer>
-    </BrowserRouter>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <LayoutContainer>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/movies/:id" element={<MovieDetailsPage />} />
+            <Route path="/people/:id" element={<PersonDetailsPage />} />
+          </Routes>
+        </LayoutContainer>
+      </BrowserRouter>
+    </ErrorBoundary>
   );
 }
 

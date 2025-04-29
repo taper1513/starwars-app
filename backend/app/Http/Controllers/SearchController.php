@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\SearchPerformed;
 use App\Services\SwapiService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class SearchController extends Controller
 {
@@ -26,12 +27,27 @@ class SearchController extends Controller
             'movies' => $this->swapiService->searchMovies($query),
         };
     
+        $executionTime = microtime(true) - $start;
+
+
+        Log::info('SearchPerformed triggering event', [
+            'query' => $query,
+            'type' => $request->type,
+            'execution_time' => $executionTime
+        ]);
+
         SearchPerformed::dispatch(
             $query,
             $request->type,
-            microtime(true) - $start
+            $executionTime
         );
-    
+
+        Log::info('Event dispatched', [
+            'query' => $query,
+            'type' => $request->type,
+            'execution_time' => $executionTime
+        ]);
+
         return response()->json($results);
     }
 } 

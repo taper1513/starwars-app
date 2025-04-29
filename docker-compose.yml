@@ -13,34 +13,48 @@ services:
       - redis
     environment:
       CACHE_DRIVER: redis
+      CACHE_STORE: redis
       QUEUE_CONNECTION: redis
       REDIS_HOST: redis
-
+  
+  cachewarmer:
+    build: ./backend
+    command: php artisan swapi:warm-cache
+    depends_on:
+      - app
+    
   queue:
     build: ./backend
     volumes:
       - ./backend:/var/www
       - vendor_app:/var/www/vendor
-    command: php artisan queue:work
+    command: php artisan queue:work --tries=1 --max-jobs=1000 --max-time=3600 --sleep=3 --memory=128
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
     depends_on:
       - redis
     environment:
       CACHE_DRIVER: redis
+      CACHE_STORE: redis
       QUEUE_CONNECTION: redis
       REDIS_HOST: redis
   
   scheduler:
-    build: ./backend
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile.scheduler
     volumes:
       - ./backend:/var/www
       - vendor_app:/var/www/vendor
-    command: php artisan schedule:work
     depends_on:
       - app
       - queue
       - redis
     environment:
       CACHE_DRIVER: redis
+      CACHE_STORE: redis
       QUEUE_CONNECTION: redis
       REDIS_HOST: redis
 
@@ -55,6 +69,13 @@ services:
     image: redis:alpine
     ports:
       - "6379:6379"
+
+  tests:
+    build: ./backend
+    volumes:
+      - ./backend:/var/www
+      - vendor_app:/var/www/vendor
+    command: php artisan test
 
 volumes:
   vendor_app:

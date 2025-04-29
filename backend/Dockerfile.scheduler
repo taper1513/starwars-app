@@ -1,0 +1,28 @@
+FROM php:8.2-cli
+
+# Install system dependencies and cron
+RUN apt-get update && apt-get install -y \
+    zip unzip curl git libzip-dev libpng-dev libonig-dev cron \
+    && docker-php-ext-install pdo pdo_mysql zip \
+    && pecl install redis \
+    && docker-php-ext-enable redis
+
+
+RUN php -m | grep redis
+    
+    
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+WORKDIR /var/www
+
+COPY . .
+
+RUN composer install
+
+# Copy cron config
+COPY scheduler.cron /etc/cron.d/laravel-scheduler
+RUN chmod 0644 /etc/cron.d/laravel-scheduler
+RUN crontab /etc/cron.d/laravel-scheduler
+
+# Command: run cron foreground
+CMD ["cron", "-f"]

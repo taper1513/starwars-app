@@ -15,7 +15,7 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
         SearchPerformed::class => [
-            // We can add listeners here if needed
+            \App\Listeners\UpdateRawSearchStats::class,
         ],
     ];
 
