@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   app:
     build: ./backend
@@ -88,16 +86,17 @@ services:
     volumes:
       - ./backend:/var/www
       - vendor_app:/var/www/vendor
-    command: php artisan test
+    command: sh -c "cp .env.example .env && php artisan key:generate && php artisan test"
     environment:  
       LOG_LEVEL: error
 
   frontend-tests:
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.unitTests
     volumes:
-      - ./frontend:/app
-    working_dir: /app
-    command: npm test
+    - ./frontend:/app
+    command: sh -c "npm install && npm test"
 
 volumes:
   vendor_app:
