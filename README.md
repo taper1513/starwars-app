@@ -8,7 +8,8 @@ https://swapi.dev/ wasn't serving a secure connection, so this project is curren
 
 1. **Clone the repository:**
    ```sh
-   git clone <your-repo-url>
+   git clone https://github.com/taper1513/starwars-app.git
+   
    cd starwarsapp
    ```
 
