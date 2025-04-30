@@ -18,7 +18,7 @@ type Result = {
     const navigate = useNavigate();
 
     return (
-      <div className="bg-white shadow p-8 lg:w-[582px] h-[582px] overflow-y-auto">
+      <div className="bg-white shadow p-8 lg:w-[582px] h-[582px]">
         <h2 className="text-2xl font-bold text-black mb-6">Results</h2>
         <div className="h-[1px] lg:w-[522px] bg-[#c4c4c4] sm:w-full"></div>
         {isLoading ? (

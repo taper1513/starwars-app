@@ -8,7 +8,8 @@ services:
       - vendor_app:/var/www/vendor
       - storage_app:/var/www/storage
     command: >
-      sh -c "composer dump-autoload &&
+      sh -c "composer install --no-interaction --prefer-dist &&
+             composer dump-autoload &&
              php artisan config:clear &&
              php artisan cache:clear &&
              php artisan package:discover &&
@@ -85,7 +86,8 @@ services:
     command: cron -f
 
   frontend:
-    build: ./frontend
+    build: 
+      context: ./frontend
     ports:
       - "3000:3000"
     depends_on:
